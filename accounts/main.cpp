@@ -8,6 +8,12 @@ struct BankAccount {
     double balance{};
 };
 
+void UpdateBalance(BankAccount &account, double balance)
+{
+    account.balance = balance;
+}
+
+
 int main() {
     std::map<int, BankAccount> accounts;
 
@@ -32,7 +38,10 @@ int main() {
 
         auto accountData = account->second;
         std::cout << "Здравствуйте, " << account->second.ownerName << ". Ваш текущий баланс - " << account->second.balance << ". Введите новое значение баланса: " << std::endl;
-        std::cin >> accountData.balance;
+        double newBalance {};
+        std::cin >> newBalance;
+
+        UpdateBalance(accountData, newBalance);
 
         std::cout << "Данные вашего счёта: " << accountData.ownerName << ", "
                   << accountData.accountNumber << ", " << accountData.balance << std::endl;
