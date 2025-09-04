@@ -2,20 +2,43 @@
 #include <ostream>
 #include <istream>
 #include <vector>
-#include <iostream>
+
 #include <fstream>
 #include <filesystem>
 #include <algorithm>
-struct Address {
-    std::string Town{};
-    std::string Street{};
-    int House{};
-    int ApartmentsNumber{};
+class Address {
+public:
+    Address(const std::string &town, const std::string &street, int house, int apartmentsNumber) : Town(town),
+                                                                                                   Street(street),
+                                                                                                   House(house),
+                                                                                                   ApartmentsNumber(
+                                                                                                           apartmentsNumber) {}
+
+    const std::string &getTown() const {
+        return Town;
+    }
+
+    const std::string &getStreet() const {
+        return Street;
+    }
+
+    int getHouse() const {
+        return House;
+    }
+
+    int getApartmentsNumber() const {
+        return ApartmentsNumber;
+    }
 
     [[nodiscard]] std::string ToString() const {
         return Town + ", " + Street + ", " + std::to_string(House) + ", " + std::to_string(ApartmentsNumber);
     }
 
+private:
+     std::string Town;
+     std::string Street;
+     int House;
+     int ApartmentsNumber;
 };
 
 void PrintAddresses(std::ostream &output, const std::vector<Address> &addresses) {
@@ -31,13 +54,17 @@ std::vector<Address> ReadAddresses(std::istream &input) {
     int count;
     input >> count;
     std::vector<Address> addresses {};
+    std::string town{};
+    std::string street{};
+    int house{};
+    int apartmentsNumber{};
+
     for(int i = 0; i < count; i++) {
-        Address address;
-        input >> address.Town;
-        input >> address.Street;
-        input >> address.House;
-        input >> address.ApartmentsNumber;
-        addresses.push_back(address);
+        input >> town;
+        input >> street;
+        input >> house;
+        input >> apartmentsNumber;
+        addresses.emplace_back(town, street, house, apartmentsNumber);
     }
     return  addresses;
 }
@@ -48,7 +75,7 @@ int main() {
 
     std::ifstream inFile(inFilePath);
     std::vector<Address> addresses = ReadAddresses(inFile);
-    std::sort(addresses.begin(), addresses.end(),[](Address &a1, Address &a2) { return a1.Town > a2.Town;});
+    std::sort(addresses.begin(), addresses.end(),[](Address &a1, Address &a2) { return a1.getTown() > a2.getTown();});
     inFile.close();
 
     auto outFilePath = exePath + "/out.txt";
